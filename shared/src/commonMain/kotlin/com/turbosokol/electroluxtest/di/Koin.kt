@@ -1,5 +1,7 @@
 package com.turbosokol.electroluxtest.di
 
+import com.turbosokol.electroluxtest.data.FlickrRepository
+import com.turbosokol.electroluxtest.network.FlickrApi
 import com.turbosokol.electroluxtest.network.HttpEngineFactory
 import io.ktor.client.*
 import io.ktor.client.features.json.*
@@ -18,7 +20,8 @@ fun createKoin() = startKoin{
 fun commonModule() = module {
     single { CoroutineScope(Dispatchers.Default + Job()) }
     single { createKtorClient() }
-    //TODO::init repository
+    single { FlickrRepository() }
+    single { FlickrApi(get()) }
 }
 
 fun createKtorClient() = HttpClient(HttpEngineFactory().createEngine()) {

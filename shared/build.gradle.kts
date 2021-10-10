@@ -30,7 +30,9 @@ kotlin {
                 //NETWORK
                 implementation("io.ktor:ktor-client-core:${findProperty("version.ktor")}")
                 implementation("io.ktor:ktor-client-logging:${findProperty("version.ktor")}")
+                implementation("io.ktor:ktor-client-json:${findProperty("version.ktor")}")
                 implementation("io.ktor:ktor-client-serialization:${findProperty("version.ktor")}")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:${findProperty("version.serialization")}")
 
                 //DI
                 api("io.insert-koin:koin-core:${findProperty("version.koin")}")
