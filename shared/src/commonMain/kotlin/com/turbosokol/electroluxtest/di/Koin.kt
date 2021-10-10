@@ -11,9 +11,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import org.koin.core.context.startKoin
+import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun createKoin() = startKoin{
+fun createKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
+    appDeclaration()
     modules()
 }
 
