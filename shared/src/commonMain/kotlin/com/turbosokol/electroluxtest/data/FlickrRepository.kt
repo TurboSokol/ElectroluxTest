@@ -11,13 +11,13 @@ class FlickrRepository: KoinComponent {
 
      suspend fun fetchElectroluxImages() {
          flickrApi.fetchElectroluxImages {  flow: Flow<List<FlickrResponseModel>> ->
-
+            //TODO::REBASE IN VIEWMODEL?
          }
     }
 
      suspend fun fetchSearchedImages(searchTag: String)  {
         flickrApi.fetchSearchedImages(searchTag) {
-            
+
         }
     }
 
