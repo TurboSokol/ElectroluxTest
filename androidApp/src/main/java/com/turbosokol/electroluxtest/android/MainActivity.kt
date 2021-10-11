@@ -82,8 +82,8 @@ fun MainNavigation(imageList: List<PhotoItem?>) {
             MainScreen(navController = navController, items = imageList)
         }
         composable(route = ScreensRoutes.DetailScreen.route) {
-            it.arguments?.getString("url").let {
-                DetailScreen(url = it)
+            it.arguments?.getString("url").let { url ->
+                DetailScreen(url = url)
             }
 
         }

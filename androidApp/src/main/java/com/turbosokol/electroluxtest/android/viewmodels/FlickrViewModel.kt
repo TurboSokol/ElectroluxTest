@@ -14,6 +14,7 @@ import org.koin.core.component.inject
 class FlickrViewModel(): ViewModel(), KoinComponent {
     private val repository: FlickrRepositoryInterface by inject()
     val imageList: MutableState<List<PhotoItem?>> = mutableStateOf(listOf())
+    val searchTag: MutableState<String> = mutableStateOf("")
 
     //Request on app starting
     fun fetchElectroluxImages() {
@@ -24,6 +25,17 @@ class FlickrViewModel(): ViewModel(), KoinComponent {
         }
     }
 
-    //TODO:: DYNAMIC REQUEST
+    fun onSearchTagChanged(newValue: String) {
+        searchTag.value = newValue
+    }
+
+   fun fetchSearchedImages(searchTag: String) {
+       viewModelScope.launch {
+           repository.fetchSearchedImages(searchTag) { response ->
+               //TODO:: CORRECT CHECS
+               imageList.value = response.photos.let { response.photos!!.photo!! }
+           }
+       }
+   }
 
 }
