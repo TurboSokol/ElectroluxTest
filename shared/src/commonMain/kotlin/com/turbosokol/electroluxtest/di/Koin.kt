@@ -1,6 +1,7 @@
 package com.turbosokol.electroluxtest.di
 
 import com.turbosokol.electroluxtest.data.FlickrRepository
+import com.turbosokol.electroluxtest.data.FlickrRepositoryInterface
 import com.turbosokol.electroluxtest.network.FlickrApi
 import com.turbosokol.electroluxtest.network.HttpEngineFactory
 import io.ktor.client.*
@@ -22,7 +23,7 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
 fun commonModule() = module {
     single { CoroutineScope(Dispatchers.Default + Job()) }
     single { createKtorClient() }
-    single { FlickrRepository() }
+    single<FlickrRepositoryInterface> { FlickrRepository() }
     single { FlickrApi(get()) }
 }
 
