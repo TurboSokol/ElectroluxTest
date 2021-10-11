@@ -16,7 +16,7 @@ import com.turbosokol.electroluxtest.android.utils.PLACEHOLDER_IMAGE
 import com.turbosokol.electroluxtest.data.PhotoItem
 
 @Composable
-fun ImageCard(photoItem: PhotoItem, onClick: () -> Unit) {
+fun ImageCard(index: Int, photoItem: PhotoItem?, onClick: () -> Unit) {
     Card(
         shape = MaterialTheme.shapes.small,
         modifier = Modifier
@@ -28,7 +28,7 @@ fun ImageCard(photoItem: PhotoItem, onClick: () -> Unit) {
         Row(modifier = Modifier.padding(4.dp)) {
 
                 Image(
-                    painter = rememberImagePainter(data = photoItem.url_m, builder = {
+                    painter = rememberImagePainter(data = photoItem?.url_m, builder = {
                         placeholder(PLACEHOLDER_IMAGE)
                     }),
                     contentDescription = stringResource(R.string.default_content_description),

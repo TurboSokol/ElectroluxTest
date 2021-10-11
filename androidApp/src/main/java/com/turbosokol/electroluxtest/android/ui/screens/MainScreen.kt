@@ -16,7 +16,9 @@ fun MainScreen(
         //TODO::SEARCH BAR
         LazyColumn() {
             itemsIndexed(items = items) { index, item ->
-                //TODO::IMAGE CARD WITH ONCLICK
+                ImageCard(index, item, onClick = {
+                    navController.navigate(ScreensRoutes.DetailScreen.createRoute(item?.url_m))
+                })
             }
         }
     })

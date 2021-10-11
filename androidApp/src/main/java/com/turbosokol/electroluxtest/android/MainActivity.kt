@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
     //lazy initialization of view model - it will be init at the moment when it invoking
     //this view model collect all data about flickr images service
-    private val flickViewModel: FlickrViewModel = getViewModel()
+    private val flickViewModel: FlickrViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

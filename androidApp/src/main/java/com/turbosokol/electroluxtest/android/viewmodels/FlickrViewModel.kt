@@ -7,11 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.turbosokol.electroluxtest.data.FlickrRepositoryInterface
 import com.turbosokol.electroluxtest.data.PhotoItem
 import kotlinx.coroutines.launch
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 
-class FlickrViewModel(
-    private val repository: FlickrRepositoryInterface
-): ViewModel() {
+class FlickrViewModel(): ViewModel(), KoinComponent {
+    private val repository: FlickrRepositoryInterface by inject()
     val imageList: MutableState<List<PhotoItem?>> = mutableStateOf(listOf())
 
     //Request on app starting
