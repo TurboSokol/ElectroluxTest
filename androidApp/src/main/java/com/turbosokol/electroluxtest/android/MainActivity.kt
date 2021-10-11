@@ -11,8 +11,8 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,9 +26,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 
-class MainActivity : ComponentActivity() {
+class MainActivity() : ComponentActivity() {
 
     //Scope for launchUI
     private val myUiScope = CoroutineScope(Dispatchers.Main + Job())
@@ -37,6 +36,7 @@ class MainActivity : ComponentActivity() {
     //this view model collect all data about flickr images service
     private val flickViewModel: FlickrViewModel by viewModels()
 
+    @ExperimentalComposeUiApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //GET DEFAULT FLICKR REQUEST
@@ -74,12 +74,13 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+@ExperimentalComposeUiApi
 @Composable
-fun MainNavigation(imageList: List<PhotoItem?>) {
+fun MainNavigation() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = ScreensRoutes.MainScreen.route) {
         composable(route = ScreensRoutes.MainScreen.route) {
-            MainScreen(navController = navController, items = imageList)
+            MainScreen(navController = navController, )
         }
         composable(route = ScreensRoutes.DetailScreen.route) {
             it.arguments?.getString("url").let { url ->
