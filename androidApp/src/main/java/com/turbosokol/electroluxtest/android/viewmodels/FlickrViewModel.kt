@@ -4,14 +4,13 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.turbosokol.electroluxtest.data.FlickrRepository
-import com.turbosokol.electroluxtest.data.FlickrResponseModel
+import com.turbosokol.electroluxtest.data.FlickrRepositoryInterface
 import com.turbosokol.electroluxtest.data.PhotoItem
 import kotlinx.coroutines.launch
-import org.koin.core.component.KoinComponent
+
 
 class FlickrViewModel(
-    private val repository: FlickrRepository
+    private val repository: FlickrRepositoryInterface
 ): ViewModel() {
     val imageList: MutableState<List<PhotoItem?>> = mutableStateOf(listOf())
 
