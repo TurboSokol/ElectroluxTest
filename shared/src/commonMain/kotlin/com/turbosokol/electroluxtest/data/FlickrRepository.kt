@@ -7,7 +7,7 @@ import org.koin.core.component.inject
 
 interface FlickrRepositoryInterface{
     suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit)
-    suspend fun fetchSearchedImages(searchTag: String)
+    suspend fun fetchSearchedImages(searchTag: String, callback: (FlickrResponseModel) -> Unit)
 }
 
 class FlickrRepository: KoinComponent, FlickrRepositoryInterface {
@@ -17,13 +17,12 @@ class FlickrRepository: KoinComponent, FlickrRepositoryInterface {
      override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
          flickrApi.fetchElectroluxImages {
              callback(it)
-            //TODO::REBASE IN VIEWMODEL?
          }
     }
 
-     override suspend fun fetchSearchedImages(searchTag: String)  {
+    override suspend fun fetchSearchedImages(searchTag: String, callback: (FlickrResponseModel) -> Unit)  {
         flickrApi.fetchSearchedImages(searchTag) {
-
+            callback(it)
         }
     }
 
