@@ -15,13 +15,15 @@ class FlickrViewModel(
 ): ViewModel() {
     val imageList: MutableState<List<PhotoItem?>> = mutableStateOf(listOf())
 
+    //Request on app starting
     fun fetchElectroluxImages() {
         viewModelScope.launch {
             repository.fetchElectroluxImages() { response ->
                 imageList.value = response.photos.let { response.photos!!.photo!! }
             }
         }
-
     }
+
+    //TODO:: DYNAMIC REQUEST
 
 }

@@ -56,5 +56,5 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MainNavigation(list: List<PhotoItem?>) {
     val navController = rememberNavController()
-
+    //TODO::CREATE NAVIGATION
 }

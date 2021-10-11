@@ -13,6 +13,7 @@ fun MainScreen(
     items: List<PhotoItem?>
 ) {
     Scaffold(content = {
+        //TODO::SEARCH BAR
         LazyColumn() {
             itemsIndexed(items = items) { index, item ->
                 //TODO::IMAGE CARD WITH ONCLICK
