@@ -12,9 +12,9 @@ class FlickrApi(
     val ktorClient: HttpClient
 ) : KoinComponent {
     //App launch request with default search tag
-    fun fetchElectroluxImages(callback: (Flow<List<FlickrResponseModel>>) -> Unit) {
+    fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
         applicationScope.launch(expectedDispatcher) {
-            val response: Flow<List<FlickrResponseModel>> =
+            val response: FlickrResponseModel =
                 ktorClient.get("$BASE_URL$ELECTROLUX_TAG$DEFAULT_FLICKR_QUERY_ARGUMENTS")
             callback(response)
         }
@@ -23,10 +23,10 @@ class FlickrApi(
     //Dynamic request witch search image by tag from app search engine
     fun fetchSearchedImages(
         searchTag: String,
-        callback: (Flow<List<FlickrResponseModel>>) -> Unit
+        callback: (FlickrResponseModel) -> Unit
     ) {
         applicationScope.launch(expectedDispatcher) {
-            val response: Flow<List<FlickrResponseModel>> =
+            val response: FlickrResponseModel =
                 ktorClient.get("$BASE_URL$searchTag$DEFAULT_FLICKR_QUERY_ARGUMENTS")
             callback(response)
         }

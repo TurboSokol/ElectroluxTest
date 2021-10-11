@@ -19,6 +19,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${findProperty("version.compose")}")
     debugImplementation("androidx.compose.ui:ui-tooling:${findProperty("version.compose")}")
     implementation("io.coil-kt:coil-compose:1.3.2")
+    implementation("androidx.navigation:navigation-compose:2.4.0-alpha09")
+
 
     //DI
     implementation("io.insert-koin:koin-core:${findProperty("version.koin")}")

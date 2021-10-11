@@ -9,8 +9,9 @@ class FlickrRepository: KoinComponent {
 
     private val flickrApi: FlickrApi by inject()
 
-     suspend fun fetchElectroluxImages() {
-         flickrApi.fetchElectroluxImages {  flow: Flow<List<FlickrResponseModel>> ->
+     suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
+         flickrApi.fetchElectroluxImages {
+             callback(it)
             //TODO::REBASE IN VIEWMODEL?
          }
     }

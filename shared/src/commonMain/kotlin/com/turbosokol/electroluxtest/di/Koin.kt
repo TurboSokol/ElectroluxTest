@@ -14,9 +14,9 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
 
-fun createKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
+fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
     appDeclaration()
-    modules()
+    modules(commonModule())
 }
 
 fun commonModule() = module {
