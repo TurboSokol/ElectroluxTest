@@ -44,7 +44,13 @@ kotlin {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
 
-                //TODO::ADD Junit TESTS
+                implementation(kotlin("test-junit"))
+                implementation("junit:junit:4.13.2")
+                implementation ("com.google.truth:truth:1.0.1")
+
+                //TESTING
+                implementation("org.assertj:assertj-core:${findProperty("version.assertj")}")
+                implementation("org.mockito.kotlin:mockito-kotlin:${findProperty("version.mockito")}")
             }
         }
         val androidMain by getting {
@@ -79,4 +85,7 @@ android {
         minSdkVersion(24)
         targetSdkVersion(31)
     }
+}
+dependencies {
+    testImplementation("junit:junit:4.12")
 }
