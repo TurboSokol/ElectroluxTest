@@ -16,8 +16,8 @@ class FlickrRepository : KoinComponent, FlickrRepositoryInterface {
 
     override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
         try {
-            flickrApi.fetchElectroluxImages {
-                callback(it)
+            flickrApi.fetchElectroluxImages { response ->
+               callback(response)
             }
         } catch (e: Exception) {
 
@@ -35,6 +35,20 @@ class FlickrRepository : KoinComponent, FlickrRepositoryInterface {
         } catch (e: Exception) {
 
         }
+    }
+
+}
+
+class FlickrRepositoryTest(): FlickrRepositoryInterface {
+    override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun fetchSearchedImages(
+        searchTag: String,
+        callback: (FlickrResponseModel) -> Unit
+    ) {
+        TODO("Not yet implemented")
     }
 
 }

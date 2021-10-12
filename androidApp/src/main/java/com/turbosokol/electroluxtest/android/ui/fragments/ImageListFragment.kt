@@ -55,53 +55,55 @@ class ImageListFragment : Fragment() {
                 ElectroluxTestTheme {
                     // A surface container using the 'background' color from the theme
                     Surface(color = MaterialTheme.colors.background) {
-                        //Shows progress bar until wait response
-                        if (imagesList.isEmpty()) {
-                            Box(
-                                contentAlignment = Alignment.Center,
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                CircularProgressIndicator(color = MaterialTheme.colors.secondary)
-                            }
-                        }
-                        //Show content after response loaded
-                        if (imagesList.isNotEmpty()) {
-                            Column {
-                                Surface(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    elevation = 8.dp
-                                )
-                                {
-                                    Row(modifier = Modifier.fillMaxWidth()) {
-                                        TextField(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .padding(8.dp),
-                                            value = searchTag,
-                                            onValueChange = { newValue ->
-                                                flickrViewModel.onSearchTagChanged(newValue)
-                                            },
-                                            label = { Text(text = stringResource(id = R.string.search)) },
-                                            keyboardOptions = KeyboardOptions(
-                                                keyboardType = KeyboardType.Text,
-                                                imeAction = ImeAction.Search,
-                                            ),
-                                            leadingIcon = {
-                                                Icon(
-                                                    painterResource(id = R.drawable.ic_baseline_search_24),
-                                                    contentDescription = null
-                                                )
-                                            },
-                                            keyboardActions = KeyboardActions(onSearch = {
-                                                //Clearing image list for animation
-                                                flickrViewModel.clearImageList()
-                                                flickrViewModel.fetchSearchedImages(searchTag)
-                                                keyboard?.hide()
-                                                flickrViewModel.onSearchTagChanged("")
-                                            })
-                                        )
-                                    }
+
+                        Column {
+                            Surface(
+                                modifier = Modifier.fillMaxWidth(),
+                                elevation = 8.dp
+                            )
+                            {
+                                Row(modifier = Modifier.fillMaxWidth()) {
+                                    TextField(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(8.dp),
+                                        value = searchTag,
+                                        onValueChange = { newValue ->
+                                            flickrViewModel.onSearchTagChanged(newValue)
+                                        },
+                                        label = { Text(text = stringResource(id = R.string.search)) },
+                                        keyboardOptions = KeyboardOptions(
+                                            keyboardType = KeyboardType.Text,
+                                            imeAction = ImeAction.Search,
+                                        ),
+                                        leadingIcon = {
+                                            Icon(
+                                                painterResource(id = R.drawable.ic_baseline_search_24),
+                                                contentDescription = null
+                                            )
+                                        },
+                                        keyboardActions = KeyboardActions(onSearch = {
+                                            //Clearing image list for animation
+                                            flickrViewModel.clearImageList()
+                                            flickrViewModel.fetchSearchedImages(searchTag)
+                                            keyboard?.hide()
+                                            flickrViewModel.onSearchTagChanged("")
+                                        })
+                                    )
                                 }
+                            }
+                            //Shows progress bar until wait response
+                            if (imagesList.isEmpty()) {
+                                Box(
+                                    contentAlignment = Alignment.Center,
+                                    modifier = Modifier.fillMaxSize()
+                                ) {
+                                    CircularProgressIndicator(color = MaterialTheme.colors.secondary)
+                                }
+                            }
+
+                            //Show content after response loaded
+                            else {
                                 //Recycler view
                                 LazyColumn() {
                                     itemsIndexed(items = imagesList) { index, item ->
@@ -110,11 +112,13 @@ class ImageListFragment : Fragment() {
                                             val bundle = Bundle().apply {
                                                 putString("photoUrl", item?.url_m)
                                             }
-                                            findNavController().navigate(R.id.action_imageListFragment_to_detailFragment, bundle)
+                                            findNavController().navigate(
+                                                R.id.action_imageListFragment_to_detailFragment,
+                                                bundle
+                                            )
                                         })
                                     }
 
-                                    }
                                 }
                             }
                         }
@@ -122,9 +126,10 @@ class ImageListFragment : Fragment() {
                 }
             }
         }
-
-        private fun fetchData() {
-            flickrViewModel.fetchElectroluxImages()
-        }
     }
+
+    private fun fetchData() {
+        flickrViewModel.fetchElectroluxImages()
+    }
+}
 

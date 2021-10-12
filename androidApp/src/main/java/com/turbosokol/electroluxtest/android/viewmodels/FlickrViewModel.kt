@@ -21,8 +21,27 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
     fun fetchElectroluxImages() {
         viewModelScope.launch {
             repository.fetchElectroluxImages() { response ->
-                imageList.value =
-                    response.photos.let { response.photos!!.photo.let { response.photos!!.photo!! } }
+                if (response.photos != null) {
+                    imageList.value =
+                        response.photos!!.photo.let { response.photos!!.photo!! }
+                } else {
+                    imageList.value = listOf(
+                        PhotoItem(
+                            owner = null,
+                            server = null,
+                            isfriend = null,
+                            ispublic = null,
+                            farm = null,
+                            id = null,
+                            secret = null,
+                            url_m = null,
+                            title = null,
+                            height_m = null,
+                            width_m = null,
+                            isfamily = null
+                        )
+                    )
+                }
             }
         }
     }
@@ -31,8 +50,12 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
     fun fetchSearchedImages(searchTag: String) {
         viewModelScope.launch {
             repository.fetchSearchedImages(searchTag) { response ->
-                imageList.value =
-                    response.photos.let { response.photos!!.photo.let { response.photos!!.photo!! } }
+                if (response.photos != null) {
+                    imageList.value =
+                        response.photos!!.photo.let { response.photos!!.photo!! }
+                } else {
+                    fetchElectroluxImages()
+                }
             }
         }
     }

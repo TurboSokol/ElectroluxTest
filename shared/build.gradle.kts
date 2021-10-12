@@ -43,6 +43,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+
+                //TODO::ADD Junit TESTS
             }
         }
         val androidMain by getting {
