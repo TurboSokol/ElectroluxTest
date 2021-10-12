@@ -8,14 +8,18 @@ import com.turbosokol.electroluxtest.data.FlickrRepositoryInterface
 import com.turbosokol.electroluxtest.data.PhotoItem
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 
 class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewModel(),
     KoinComponent {
+    //List of fetched images
     val imageList: MutableState<List<PhotoItem?>> = mutableStateOf(listOf())
+    //Mutable state for reading and displaying user search requests
     val searchTag: MutableState<String> = mutableStateOf("")
-    val photoUrl: MutableState<String> = mutableStateOf("")
+    //Mutable state flag to show different looks of selected items in lazy column
+    val onSelected: MutableState<Boolean> = mutableStateOf(false)
+    //Mutable state for changing UI in a target lazy column items
+    val itemIndex: MutableState<Int> = mutableStateOf(0)
 
     //Request on app starting
     fun fetchElectroluxImages() {
@@ -23,7 +27,7 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
             repository.fetchElectroluxImages() { response ->
                 if (response.photos != null) {
                     imageList.value =
-                        response.photos!!.photo.let { response.photos!!.photo!! }
+                        response.photos!!.photo.let { it!! }
                 } else {
                     imageList.value = listOf(
                         PhotoItem(
@@ -52,7 +56,7 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
             repository.fetchSearchedImages(searchTag) { response ->
                 if (response.photos != null) {
                     imageList.value =
-                        response.photos!!.photo.let { response.photos!!.photo!! }
+                        response.photos!!.photo.let { it!! }
                 } else {
                     fetchElectroluxImages()
                 }
@@ -65,12 +69,16 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
         searchTag.value = newValue
     }
 
-    //Set observable value for image in Detail screen
-    fun setPhotoUrl(newValue: String) {
-        photoUrl.value = newValue
-    }
-
+    //Clearing list for showing load indicator
     fun clearImageList() {
         imageList.value = listOf()
+    }
+
+    fun switchOnSelected(newValue: Boolean) {
+        onSelected.value = newValue
+    }
+
+    fun setIndex(newValue: Int) {
+        itemIndex.value = newValue
     }
 }
