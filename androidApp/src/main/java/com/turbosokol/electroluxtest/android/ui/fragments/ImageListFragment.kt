@@ -36,6 +36,7 @@ class ImageListFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        //Load data before launch UI
         fetchData()
     }
 
@@ -44,10 +45,6 @@ class ImageListFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //Load data before launch
-
-
-        //TODO::ANIMATED PROGRESS BAR FOR LOADING IMAGES
         return ComposeView(requireContext()).apply {
             setContent {
                 val keyboard = LocalSoftwareKeyboardController.current
