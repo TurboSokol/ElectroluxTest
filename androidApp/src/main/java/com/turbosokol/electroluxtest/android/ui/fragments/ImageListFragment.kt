@@ -21,17 +21,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.turbosokol.electroluxtest.android.R
 import com.turbosokol.electroluxtest.android.ui.items.ImageCard
 import com.turbosokol.electroluxtest.android.ui.theme.ElectroluxTestTheme
 import com.turbosokol.electroluxtest.android.viewmodels.FlickrViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @ExperimentalComposeUiApi
 class ImageListFragment : Fragment() {
-
-    private val flickrViewModel: FlickrViewModel by viewModels()
+    private val flickrViewModel: FlickrViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,76 +39,75 @@ class ImageListFragment : Fragment() {
     ): View? {
         //Load data before launch
         fetchData()
+
         //TODO::ANIMATED PROGRESS BAR FOR LOADING IMAGES
         return ComposeView(requireContext()).apply {
-                setContent {
-                    val keyboard = LocalSoftwareKeyboardController.current
-                    //Observable MutableState
-                    val imagesList = flickrViewModel.imageList.value
-                    val searchTag = flickrViewModel.searchTag.value
+            setContent {
+                val keyboard = LocalSoftwareKeyboardController.current
+                //Observable MutableState
+                val imagesList = flickrViewModel.imageList.value
+                val searchTag = flickrViewModel.searchTag.value
 
-                    ElectroluxTestTheme {
-                        // A surface container using the 'background' color from the theme
-                        Surface(color = MaterialTheme.colors.background) {
-                            //Shows progress bar until wait response
-                            if (imagesList.isEmpty()) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    CircularProgressIndicator(color = MaterialTheme.colors.secondary)
-                                }
+                ElectroluxTestTheme {
+                    // A surface container using the 'background' color from the theme
+                    Surface(color = MaterialTheme.colors.background) {
+                        //Shows progress bar until wait response
+                        if (imagesList.isEmpty()) {
+                            Box(
+                                contentAlignment = Alignment.Center,
+                                modifier = Modifier.fillMaxSize()
+                            ) {
+                                CircularProgressIndicator(color = MaterialTheme.colors.secondary)
                             }
-                            //Show content after response loaded
-                            if (imagesList.isNotEmpty()) {
-                                Column {
-                                    Surface(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        elevation = 8.dp
-                                    )
-                                    {
-
-                                        Row(modifier = Modifier.fillMaxWidth()) {
-                                            TextField(
-                                                modifier = Modifier
-                                                    .fillMaxWidth()
-                                                    .padding(8.dp),
-                                                value = searchTag,
-                                                onValueChange = { newValue ->
-                                                    flickrViewModel.onSearchTagChanged(newValue)
-                                                },
-                                                label = { Text(text = stringResource(id = R.string.search)) },
-                                                keyboardOptions = KeyboardOptions(
-                                                    keyboardType = KeyboardType.Text,
-                                                    imeAction = ImeAction.Search,
-                                                ),
-                                                leadingIcon = {
-                                                    Icon(
-                                                        painterResource(id = R.drawable.ic_baseline_search_24),
-                                                        contentDescription = null
-                                                    )
-                                                },
-                                                keyboardActions = KeyboardActions(onSearch = {
-                                                    flickrViewModel.fetchSearchedImages(searchTag)
-                                                    keyboard?.hide()
-                                                })
-                                            )
-                                        }
-                                    }
-
-                                    //Recycler view
-                                    LazyColumn() {
-                                        itemsIndexed(items = imagesList) { index, item ->
-                                            ImageCard(index, item, onClick = {
-                                                //Send url to detail screen
-                                                val bundle = Bundle().apply {
-                                                    putString("photoUrl", item?.url_m)
-                                                }
-                                                findNavController().navigate(R.id.action_imageListFragment_to_detailFragment, bundle)
+                        }
+                        //Show content after response loaded
+                        if (imagesList.isNotEmpty()) {
+                            Column {
+                                Surface(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    elevation = 8.dp
+                                )
+                                {
+                                    Row(modifier = Modifier.fillMaxWidth()) {
+                                        TextField(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .padding(8.dp),
+                                            value = searchTag,
+                                            onValueChange = { newValue ->
+                                                flickrViewModel.onSearchTagChanged(newValue)
+                                            },
+                                            label = { Text(text = stringResource(id = R.string.search)) },
+                                            keyboardOptions = KeyboardOptions(
+                                                keyboardType = KeyboardType.Text,
+                                                imeAction = ImeAction.Search,
+                                            ),
+                                            leadingIcon = {
+                                                Icon(
+                                                    painterResource(id = R.drawable.ic_baseline_search_24),
+                                                    contentDescription = null
+                                                )
+                                            },
+                                            keyboardActions = KeyboardActions(onSearch = {
+                                                flickrViewModel.fetchSearchedImages(searchTag)
+                                                keyboard?.hide()
                                             })
-                                        }
+                                        )
+                                    }
+                                }
+                                //Recycler view
+                                LazyColumn() {
+                                    itemsIndexed(items = imagesList) { index, item ->
+                                        ImageCard(index, item, onClick = {
+                                            //Send url to detail screen
+                                            val bundle = Bundle().apply {
+                                                putString("photoUrl", item?.url_m)
+                                            }
+                                            findNavController().navigate(R.id.action_imageListFragment_to_detailFragment, bundle)
+                                        })
                                     }
 
+                                    }
                                 }
                             }
                         }
@@ -118,7 +116,8 @@ class ImageListFragment : Fragment() {
             }
         }
 
-    private fun fetchData() {
-        flickrViewModel.fetchElectroluxImages()
+        private fun fetchData() {
+            flickrViewModel.fetchElectroluxImages()
+        }
     }
-}
+

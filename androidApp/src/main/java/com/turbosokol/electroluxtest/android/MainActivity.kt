@@ -1,7 +1,6 @@
 package com.turbosokol.electroluxtest.android
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity() : AppCompatActivity() {

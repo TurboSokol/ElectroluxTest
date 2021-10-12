@@ -15,17 +15,17 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import com.turbosokol.electroluxtest.android.R
 import com.turbosokol.electroluxtest.android.utils.PLACEHOLDER_IMAGE
 import com.turbosokol.electroluxtest.android.viewmodels.FlickrViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class DetailFragment(
 
 ) : Fragment() {
 
-    private val flickrViewModel: FlickrViewModel by viewModels()
+    private val flickrViewModel: FlickrViewModel by sharedViewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater,

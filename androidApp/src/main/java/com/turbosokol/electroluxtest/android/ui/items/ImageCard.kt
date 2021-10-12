@@ -15,6 +15,7 @@ import com.turbosokol.electroluxtest.android.R
 import com.turbosokol.electroluxtest.android.utils.PLACEHOLDER_IMAGE
 import com.turbosokol.electroluxtest.data.PhotoItem
 
+//Item card for lazy column
 @Composable
 fun ImageCard(index: Int, photoItem: PhotoItem?, onClick: () -> Unit) {
     Card(
