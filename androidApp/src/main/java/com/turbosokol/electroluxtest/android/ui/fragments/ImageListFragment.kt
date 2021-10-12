@@ -5,29 +5,38 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
+import coil.compose.rememberImagePainter
 import com.turbosokol.electroluxtest.android.R
-import com.turbosokol.electroluxtest.android.ui.items.ImageCard
 import com.turbosokol.electroluxtest.android.ui.theme.ElectroluxTestTheme
+import com.turbosokol.electroluxtest.android.utils.PLACEHOLDER_IMAGE
+import com.turbosokol.electroluxtest.android.utils.getBitmapFromUrl
+import com.turbosokol.electroluxtest.android.utils.savePictureToGallery
 import com.turbosokol.electroluxtest.android.viewmodels.FlickrViewModel
+import com.turbosokol.electroluxtest.data.PhotoItem
+import kotlinx.coroutines.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 @ExperimentalComposeUiApi
@@ -71,7 +80,7 @@ class ImageListFragment : Fragment() {
                                         onValueChange = { newValue ->
                                             flickrViewModel.onSearchTagChanged(newValue)
                                         },
-                                        label = { Text(text = stringResource(id = R.string.search)) },
+                                        label = { Text(text = stringResource(id = R.string.search_bar_label)) },
                                         keyboardOptions = KeyboardOptions(
                                             keyboardType = KeyboardType.Text,
                                             imeAction = ImeAction.Search,
@@ -92,6 +101,7 @@ class ImageListFragment : Fragment() {
                                     )
                                 }
                             }
+
                             //Shows progress bar until wait response
                             if (imagesList.isEmpty()) {
                                 Box(
@@ -105,20 +115,13 @@ class ImageListFragment : Fragment() {
                             //Show content after response loaded
                             else {
                                 //Recycler view
-                                LazyColumn() {
+                                LazyColumn {
                                     itemsIndexed(items = imagesList) { index, item ->
                                         ImageCard(index, item, onClick = {
-                                            //Send url to detail screen
-                                            val bundle = Bundle().apply {
-                                                putString("photoUrl", item?.url_m)
-                                            }
-                                            findNavController().navigate(
-                                                R.id.action_imageListFragment_to_detailFragment,
-                                                bundle
-                                            )
+                                            flickrViewModel.switchOnSelected(true)
+                                            flickrViewModel.setIndex(index)
                                         })
                                     }
-
                                 }
                             }
                         }
@@ -126,6 +129,77 @@ class ImageListFragment : Fragment() {
                 }
             }
         }
+    }
+
+    @Composable
+    fun ImageCard(index: Int, photoItem: PhotoItem?, onClick: () -> Unit) {
+        val itemIndex = flickrViewModel.itemIndex.value
+        val onSelected = flickrViewModel.onSelected.value
+
+        //Context for bitmap operations
+        val localContext = LocalContext.current
+        //UI scope for bitmap operations
+        val localIoScope = CoroutineScope(Dispatchers.IO + Job())
+        //Main scope for callbacks from IU scope
+        val localMainScope = CoroutineScope(Dispatchers.Main + Job())
+        //Highlight card when it selected
+        var cardBorder: BorderStroke? = null
+
+        cardBorder = if (index == itemIndex && onSelected) {
+            BorderStroke(3.dp, MaterialTheme.colors.secondary)
+        } else null
+
+        Card(
+            shape = MaterialTheme.shapes.small,
+            modifier = Modifier
+                .padding(bottom = 6.dp, top = 6.dp)
+                .fillMaxWidth()
+                .clickable(onClick = onClick),
+            elevation = 8.dp,
+            border = cardBorder
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(4.dp)
+            ) {
+                Image(
+                    painter = rememberImagePainter(data = photoItem?.url_m, builder = {
+                        placeholder(PLACEHOLDER_IMAGE)
+                    }),
+                    contentDescription = stringResource(R.string.default_content_description),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp),
+                    contentScale = ContentScale.FillWidth
+                )
+
+                //Show button when item is clicked
+                if (index == itemIndex && onSelected) {
+                    Button(modifier = Modifier.fillMaxWidth(), onClick = {
+                        localIoScope.launch {
+                            val bitmap = getBitmapFromUrl(photoItem?.url_m, localContext)
+                            savePictureToGallery(bitmap, localContext) {
+                                //onSuccess saving picture callback
+                                localMainScope.launch {
+                                    flickrViewModel.switchOnSelected(false)
+                                    showToast()
+                                }
+                            }
+                        }
+                    }) {
+                        Text(
+                            text = "Download Image",
+                            modifier = Modifier.fillMaxWidth(),
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+    private fun showToast() {
+        Toast.makeText(context, getString(R.string.save_to_gallery_onsuccess_toast), Toast.LENGTH_SHORT).show()
     }
 
     private fun fetchData() {

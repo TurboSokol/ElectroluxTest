@@ -2,5 +2,6 @@
     <string name="title_activity_main">MainActivity</string>
 
     <string name="default_content_description">Flickr Photo</string>
-    <string name="search">Search</string>
+    <string name="search_bar_label">Search</string>
+    <string name="save_to_gallery_onsuccess_toast">IMAGE SAVED</string>
 </resources>
