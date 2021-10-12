@@ -1,4 +1,4 @@
-package com.turbosokol.electroluxtest.android.ui.screens
+package com.turbosokol.electroluxtest.android.ui.items
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -26,10 +26,10 @@ fun ImageCard(index: Int, photoItem: PhotoItem?, onClick: () -> Unit) {
         elevation = 8.dp
     ) {
         Row(modifier = Modifier.padding(4.dp)) {
-
                 Image(
                     painter = rememberImagePainter(data = photoItem?.url_m, builder = {
                         placeholder(PLACEHOLDER_IMAGE)
+
                     }),
                     contentDescription = stringResource(R.string.default_content_description),
                     modifier = Modifier
