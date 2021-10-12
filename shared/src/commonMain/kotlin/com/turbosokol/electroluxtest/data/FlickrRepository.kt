@@ -15,14 +15,21 @@ class FlickrRepository: KoinComponent, FlickrRepositoryInterface {
     private val flickrApi: FlickrApi by inject()
 
      override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
-         flickrApi.fetchElectroluxImages {
-             callback(it)
+         try {
+             flickrApi.fetchElectroluxImages {
+                 callback(it)
+             }
+         } catch (e: Exception) {
+
          }
-    }
+     }
 
     override suspend fun fetchSearchedImages(searchTag: String, callback: (FlickrResponseModel) -> Unit)  {
-        flickrApi.fetchSearchedImages(searchTag) {
-            callback(it)
+        try {
+            flickrApi.fetchSearchedImages(searchTag) {
+                callback(it)
+            }
+        } catch (e: Exception) {
         }
     }
 

@@ -27,6 +27,7 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
         }
     }
 
+    //TODO::try catch
     //Dynamic request from search bar
     fun fetchSearchedImages(searchTag: String) {
         viewModelScope.launch {

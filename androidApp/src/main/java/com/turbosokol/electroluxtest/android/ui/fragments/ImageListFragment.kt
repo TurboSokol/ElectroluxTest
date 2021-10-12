@@ -91,6 +91,7 @@ class ImageListFragment : Fragment() {
                                             keyboardActions = KeyboardActions(onSearch = {
                                                 flickrViewModel.fetchSearchedImages(searchTag)
                                                 keyboard?.hide()
+                                                flickrViewModel.onSearchTagChanged("")
                                             })
                                         )
                                     }
