@@ -1,5 +1,6 @@
 package com.turbosokol.electroluxtest.android.ui.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,13 +34,18 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class ImageListFragment : Fragment() {
     private val flickrViewModel: FlickrViewModel by sharedViewModel()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        fetchData()
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         //Load data before launch
-        fetchData()
+
 
         //TODO::ANIMATED PROGRESS BAR FOR LOADING IMAGES
         return ComposeView(requireContext()).apply {
@@ -89,6 +96,8 @@ class ImageListFragment : Fragment() {
                                                 )
                                             },
                                             keyboardActions = KeyboardActions(onSearch = {
+                                                //Clearing image list for animation
+                                                flickrViewModel.clearImageList()
                                                 flickrViewModel.fetchSearchedImages(searchTag)
                                                 keyboard?.hide()
                                                 flickrViewModel.onSearchTagChanged("")

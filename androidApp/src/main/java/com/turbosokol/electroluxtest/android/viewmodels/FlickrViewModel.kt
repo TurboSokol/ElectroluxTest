@@ -27,7 +27,6 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
         }
     }
 
-    //TODO::try catch
     //Dynamic request from search bar
     fun fetchSearchedImages(searchTag: String) {
         viewModelScope.launch {
@@ -46,5 +45,9 @@ class FlickrViewModel(private val repository: FlickrRepositoryInterface) : ViewM
     //Set observable value for image in Detail screen
     fun setPhotoUrl(newValue: String) {
         photoUrl.value = newValue
+    }
+
+    fun clearImageList() {
+        imageList.value = listOf()
     }
 }
