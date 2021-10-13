@@ -20,7 +20,7 @@ class FlickrRepository: FlickrRepositoryInterface {
                callback(response)
             }
         } catch (e: Exception) {
-
+            //Here we can connect logger and get error logs
         }
     }
 
@@ -33,22 +33,9 @@ class FlickrRepository: FlickrRepositoryInterface {
                 callback(it)
             }
         } catch (e: Exception) {
-
+            //Here we can connect logger and get error logs
         }
     }
 
 }
 
-class FlickrRepositoryTest: FlickrRepositoryInterface {
-    override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun fetchSearchedImages(
-        searchTag: String,
-        callback: (FlickrResponseModel) -> Unit
-    ) {
-        TODO("Not yet implemented")
-    }
-
-}

@@ -8,7 +8,7 @@ import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
 class FlickrApi(
-    val ktorClient: HttpClient
+    private val ktorClient: HttpClient
 ) : KoinComponent {
     //App launch request with default search tag
      fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {

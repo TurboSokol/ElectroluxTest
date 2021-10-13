@@ -1,6 +1,6 @@
 package com.turbosokol.electroluxtest.utils
 
-//Base flickr url with token for simplify
+//Base flickr url with token for simplify (in real project key must be saved in local.properties)
 const val BASE_URL = "https://api.flickr.com/services/rest?api_key=9100cda86ae5bbfe4e784301265565cd&method=flickr.photos.search&tags="
 //Default search tag for launch app
 const val ELECTROLUX_TAG = "Electrolux"
