@@ -48,7 +48,6 @@ class ImageListFragment : Fragment() {
         if (!appStartFetchingFlag){
             appStartDataFetching()
         }
-
     }
 
     override fun onCreateView(
@@ -58,77 +57,82 @@ class ImageListFragment : Fragment() {
     ): View? {
         return ComposeView(requireContext()).apply {
             setContent {
-                val keyboard = LocalSoftwareKeyboardController.current
-                //Observable MutableState
-                val imagesList = flickrViewModel.imageList.value
-                val searchTag = flickrViewModel.searchTag.value
+                ImagesListScreen()
+            }
+        }
+    }
 
-                ElectroluxTestTheme {
-                    // A surface container using the 'background' color from the theme
-                    Surface(color = MaterialTheme.colors.background) {
+    @Composable
+    fun ImagesListScreen() {
+        val keyboard = LocalSoftwareKeyboardController.current
+        //Observable MutableState
+        val imagesList = flickrViewModel.imageList.value
+        val searchTag = flickrViewModel.searchTag.value
 
-                        Column {
-                            Surface(
-                                modifier = Modifier.fillMaxWidth(),
-                                elevation = 8.dp
-                            )
-                            {
-                                Row(modifier = Modifier.fillMaxWidth()) {
-                                    TextField(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(8.dp),
-                                        value = searchTag,
-                                        onValueChange = { newValue ->
-                                            flickrViewModel.onSearchTagChanged(newValue)
-                                        },
-                                        label = { Text(text = stringResource(id = R.string.search_bar_label)) },
-                                        keyboardOptions = KeyboardOptions(
-                                            keyboardType = KeyboardType.Text,
-                                            imeAction = ImeAction.Search,
-                                        ),
-                                        leadingIcon = {
-                                            Icon(
-                                                painterResource(id = R.drawable.ic_baseline_search_24),
-                                                contentDescription = null
-                                            )
-                                        },
-                                        keyboardActions = KeyboardActions(onSearch = {
-                                            //Clearing image list for animation
-                                            flickrViewModel.clearImageList()
-                                            flickrViewModel.fetchSearchedImages(searchTag) {
-                                                localMainScope.launch {
-                                                    showToast(getString(R.string.search_error_toast))
-                                                }
-                                            }
-                                            keyboard?.hide()
-                                            flickrViewModel.onSearchTagChanged("")
-                                        })
+        ElectroluxTestTheme {
+            // A surface container using the 'background' color from the theme
+            Surface(color = MaterialTheme.colors.background) {
+
+                Column {
+                    Surface(
+                        modifier = Modifier.fillMaxWidth(),
+                        elevation = 8.dp
+                    )
+                    {
+                        Row(modifier = Modifier.fillMaxWidth()) {
+                            TextField(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(8.dp),
+                                value = searchTag,
+                                onValueChange = { newValue ->
+                                    flickrViewModel.onSearchTagChanged(newValue)
+                                },
+                                label = { Text(text = stringResource(id = R.string.search_bar_label)) },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Text,
+                                    imeAction = ImeAction.Search,
+                                ),
+                                leadingIcon = {
+                                    Icon(
+                                        painterResource(id = R.drawable.ic_baseline_search_24),
+                                        contentDescription = null
                                     )
-                                }
-                            }
-
-                            //Shows progress bar until wait response
-                            if (imagesList.isEmpty()) {
-                                Box(
-                                    contentAlignment = Alignment.Center,
-                                    modifier = Modifier.fillMaxSize()
-                                ) {
-                                    CircularProgressIndicator(color = MaterialTheme.colors.secondary)
-                                }
-                            }
-
-                            //Show content after response loaded
-                            else {
-                                //Recycler view
-                                LazyColumn {
-                                    itemsIndexed(items = imagesList) { index, item ->
-                                        ImageCard(index, item, onClick = {
-                                            flickrViewModel.switchOnSelected(true)
-                                            flickrViewModel.setIndex(index)
-                                        })
+                                },
+                                keyboardActions = KeyboardActions(onSearch = {
+                                    //Clearing image list for animation
+                                    flickrViewModel.clearImageList()
+                                    flickrViewModel.fetchSearchedImages(searchTag) {
+                                        localMainScope.launch {
+                                            showToast(getString(R.string.search_error_toast))
+                                        }
                                     }
-                                }
+                                    keyboard?.hide()
+                                    flickrViewModel.onSearchTagChanged("")
+                                })
+                            )
+                        }
+                    }
+
+                    //Shows progress bar until wait response
+                    if (imagesList.isEmpty()) {
+                        Box(
+                            contentAlignment = Alignment.Center,
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            CircularProgressIndicator(color = MaterialTheme.colors.secondary)
+                        }
+                    }
+
+                    //Show content after response loaded
+                    else {
+                        //Recycler view
+                        LazyColumn {
+                            itemsIndexed(items = imagesList) { index, item ->
+                                ImageCard(index, item, onClick = {
+                                    flickrViewModel.switchOnSelected(true)
+                                    flickrViewModel.setIndex(index)
+                                })
                             }
                         }
                     }
