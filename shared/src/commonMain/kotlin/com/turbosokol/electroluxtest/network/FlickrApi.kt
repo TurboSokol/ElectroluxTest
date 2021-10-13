@@ -4,7 +4,6 @@ import com.turbosokol.electroluxtest.data.FlickrResponseModel
 import com.turbosokol.electroluxtest.utils.*
 import io.ktor.client.*
 import io.ktor.client.request.*
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.koin.core.component.KoinComponent
 
@@ -12,8 +11,8 @@ class FlickrApi(
     val ktorClient: HttpClient
 ) : KoinComponent {
     //App launch request with default search tag
-    fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
-        applicationScope.launch(expectedDispatcher) {
+     fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
+        applicationNetworkScope.launch(expectedDispatcher) {
             val response: FlickrResponseModel =
                 ktorClient.get("$BASE_URL$ELECTROLUX_TAG$DEFAULT_FLICKR_QUERY_ARGUMENTS")
             callback(response)
@@ -25,7 +24,7 @@ class FlickrApi(
         searchTag: String,
         callback: (FlickrResponseModel) -> Unit
     ) {
-        applicationScope.launch(expectedDispatcher) {
+        applicationNetworkScope.launch(expectedDispatcher) {
             val response: FlickrResponseModel =
                 ktorClient.get("$BASE_URL$searchTag$DEFAULT_FLICKR_QUERY_ARGUMENTS")
             callback(response)

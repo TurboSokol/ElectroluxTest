@@ -31,9 +31,7 @@ import androidx.fragment.app.Fragment
 import coil.compose.rememberImagePainter
 import com.turbosokol.electroluxtest.android.R
 import com.turbosokol.electroluxtest.android.ui.theme.ElectroluxTestTheme
-import com.turbosokol.electroluxtest.android.utils.PLACEHOLDER_IMAGE
-import com.turbosokol.electroluxtest.android.utils.getBitmapFromUrl
-import com.turbosokol.electroluxtest.android.utils.savePictureToGallery
+import com.turbosokol.electroluxtest.android.utils.*
 import com.turbosokol.electroluxtest.android.viewmodels.FlickrViewModel
 import com.turbosokol.electroluxtest.data.PhotoItem
 import kotlinx.coroutines.*
@@ -46,7 +44,11 @@ class ImageListFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         //Load data before launch UI
-        fetchData()
+        val appStartFetchingFlag = flickrViewModel.appStartFetchingFlag.value
+        if (!appStartFetchingFlag){
+            appStartDataFetching()
+        }
+
     }
 
     override fun onCreateView(
@@ -94,7 +96,11 @@ class ImageListFragment : Fragment() {
                                         keyboardActions = KeyboardActions(onSearch = {
                                             //Clearing image list for animation
                                             flickrViewModel.clearImageList()
-                                            flickrViewModel.fetchSearchedImages(searchTag)
+                                            flickrViewModel.fetchSearchedImages(searchTag) {
+                                                localMainScope.launch {
+                                                    showToast(getString(R.string.search_error_toast))
+                                                }
+                                            }
                                             keyboard?.hide()
                                             flickrViewModel.onSearchTagChanged("")
                                         })
@@ -138,10 +144,7 @@ class ImageListFragment : Fragment() {
 
         //Context for bitmap operations
         val localContext = LocalContext.current
-        //UI scope for bitmap operations
-        val localIoScope = CoroutineScope(Dispatchers.IO + Job())
-        //Main scope for callbacks from IU scope
-        val localMainScope = CoroutineScope(Dispatchers.Main + Job())
+
         //Highlight card when it selected
         var cardBorder: BorderStroke? = null
 
@@ -182,13 +185,13 @@ class ImageListFragment : Fragment() {
                                 //onSuccess saving picture callback
                                 localMainScope.launch {
                                     flickrViewModel.switchOnSelected(false)
-                                    showToast()
+                                    showToast(getString(R.string.save_to_gallery_onsuccess_toast))
                                 }
                             }
                         }
                     }) {
                         Text(
-                            text = "Download Image",
+                            text = stringResource(R.string.download_image_label),
                             modifier = Modifier.fillMaxWidth(),
                             textAlign = TextAlign.Center
                         )
@@ -198,12 +201,13 @@ class ImageListFragment : Fragment() {
         }
     }
 
-    private fun showToast() {
-        Toast.makeText(context, getString(R.string.save_to_gallery_onsuccess_toast), Toast.LENGTH_SHORT).show()
+    private fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
     }
 
-    private fun fetchData() {
+    private fun appStartDataFetching() {
         flickrViewModel.fetchElectroluxImages()
+        flickrViewModel.appStartFetchingFlagSwitcher()
     }
 }
 

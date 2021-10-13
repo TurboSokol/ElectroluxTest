@@ -4,4 +4,6 @@
     <string name="default_content_description">Flickr Photo</string>
     <string name="search_bar_label">Search</string>
     <string name="save_to_gallery_onsuccess_toast">IMAGE SAVED</string>
+    <string name="download_image_label">Download Image</string>
+    <string name="search_error_toast">Try Another Search</string>
 </resources>

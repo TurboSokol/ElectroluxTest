@@ -4,6 +4,7 @@ import com.turbosokol.electroluxtest.data.FlickrRepository
 import com.turbosokol.electroluxtest.data.FlickrRepositoryInterface
 import com.turbosokol.electroluxtest.network.FlickrApi
 import com.turbosokol.electroluxtest.network.HttpEngineFactory
+import com.turbosokol.electroluxtest.network.ktorClient
 import io.ktor.client.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
@@ -22,18 +23,8 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = startKoin {
 
 fun commonModule() = module {
     single { CoroutineScope(Dispatchers.Default + Job()) }
-    single { createKtorClient() }
+    single { ktorClient() }
     single<FlickrRepositoryInterface> { FlickrRepository() }
     single { FlickrApi(get()) }
 }
 
-fun createKtorClient() = HttpClient(HttpEngineFactory().createEngine()) {
-    install(feature = JsonFeature) {
-        serializer = KotlinxSerializer()
-
-    }
-    install(feature = Logging) {
-        logger = Logger.DEFAULT
-        level = LogLevel.BODY
-    }
-}

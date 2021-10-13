@@ -30,6 +30,13 @@ dependencies {
     implementation("io.insert-koin:koin-test-junit4:${findProperty("version.koin")}")
     implementation("io.insert-koin:koin-android:${findProperty("version.koin")}")
     implementation("io.insert-koin:koin-androidx-compose:${findProperty("version.koin")}")
+
+    //TESTS
+    // Test rules and transitive dependencies:
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${findProperty("version.compose")}")
+    // Needed for createComposeRule, but not createAndroidComposeRule:
+    debugImplementation("androidx.compose.ui:ui-test-manifest:${findProperty("version.compose")}")
+
 }
 
 android {

@@ -1,10 +1,15 @@
+import com.turbosokol.electroluxtest.data.FlickrRepositoryTest
 import com.turbosokol.electroluxtest.data.FlickrResponseModel
+import com.turbosokol.electroluxtest.network.FlickrApi
+import org.koin.core.component.inject
 import org.koin.core.logger.Logger
 import kotlin.test.Test
 
 class MockFlickrRepositoryTest() {
 
-    private val observablePhotoList = listOf<FlickrResponseModel>()
+    private val observablePhotoList = FlickrResponseModel()
+
+
 
     private var shouldReturnError = false
 

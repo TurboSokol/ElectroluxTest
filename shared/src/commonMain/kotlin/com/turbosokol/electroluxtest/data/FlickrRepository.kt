@@ -5,12 +5,12 @@ import kotlinx.coroutines.flow.Flow
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-interface FlickrRepositoryInterface {
+interface FlickrRepositoryInterface : KoinComponent {
     suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit)
     suspend fun fetchSearchedImages(searchTag: String, callback: (FlickrResponseModel) -> Unit)
 }
 
-class FlickrRepository : KoinComponent, FlickrRepositoryInterface {
+class FlickrRepository: FlickrRepositoryInterface {
 
     private val flickrApi: FlickrApi by inject()
 
@@ -39,7 +39,7 @@ class FlickrRepository : KoinComponent, FlickrRepositoryInterface {
 
 }
 
-class FlickrRepositoryTest(): FlickrRepositoryInterface {
+class FlickrRepositoryTest: FlickrRepositoryInterface {
     override suspend fun fetchElectroluxImages(callback: (FlickrResponseModel) -> Unit) {
         TODO("Not yet implemented")
     }
