@@ -10,7 +10,6 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
-
 class FlickrRequestTest {
 
     private lateinit var koin: Koin
@@ -23,7 +22,7 @@ class FlickrRequestTest {
     }
 
     @Test
-    fun testForAppStartRequestingImagesFromFlickrApi() {
+    fun testDefaultNetworkRequestFromFlickrApi() {
         var resultList = emptyList<PhotoItem?>()
 
         applicationNetworkScope.launch {
@@ -34,13 +33,12 @@ class FlickrRequestTest {
         }
     }
 
-
-
     //Generate a random string and doing network request with it
     @Test
-    fun testForDynamicRequestImagesFromFlickrApi() {
+    fun testDynamicNetworkRequestFromFlickrApi() {
         var resultList = emptyList<PhotoItem?>()
         val randomString = mutableListOf<Char>()
+
         (1..5).map {
             val char = (('a'..'z') + ('A'..'Z') + ('0'..'9')).random()
             randomString.add(char)
@@ -57,7 +55,7 @@ class FlickrRequestTest {
 
     //Generate a HUGE random string and doing network request with it
     @Test
-    fun testForDynamicRequestImagesFromFlickrApiWithLongString() {
+    fun testDynamicNetworkRequestFromFlickrApiWithLongString() {
         var resultList = emptyList<PhotoItem?>()
         val randomString = mutableListOf<Char>()
         (1..42).map {

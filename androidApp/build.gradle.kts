@@ -20,7 +20,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview:${findProperty("version.compose")}")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.3.1")
     implementation("androidx.activity:activity-compose:1.3.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${findProperty("version.compose")}")
+//    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${findProperty("version.compose")}")
     debugImplementation("androidx.compose.ui:ui-tooling:${findProperty("version.compose")}")
     implementation("io.coil-kt:coil-compose:1.4.0")
 
@@ -30,13 +30,6 @@ dependencies {
     implementation("io.insert-koin:koin-test-junit4:${findProperty("version.koin")}")
     implementation("io.insert-koin:koin-android:${findProperty("version.koin")}")
     implementation("io.insert-koin:koin-androidx-compose:${findProperty("version.koin")}")
-
-    //TESTS
-    // Test rules and transitive dependencies:
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:${findProperty("version.compose")}")
-    // Needed for createComposeRule, but not createAndroidComposeRule:
-    debugImplementation("androidx.compose.ui:ui-test-manifest:${findProperty("version.compose")}")
-
 }
 
 android {
